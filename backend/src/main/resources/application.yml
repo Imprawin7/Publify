@@ -1,0 +1,65 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: publify-api
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-this-super-secret-key-before-deploying-to-production-min-256-bits}
+    access-token-expiry-ms: ${JWT_ACCESS_TOKEN_EXPIRY_MS:900000}
+    refresh-token-expiry-ms: ${JWT_REFRESH_TOKEN_EXPIRY_MS:604800000}
+
+  cors:
+    allowed-origin: ${FRONTEND_ORIGIN:http://localhost:3000}
+
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+
+  contact:
+    notify-email: ${CONTACT_NOTIFY_EMAIL:you@example.com}
+
+  admin:
+    seed-email: ${ADMIN_SEED_EMAIL:admin@publify.local}
+    seed-password: ${ADMIN_SEED_PASSWORD:ChangeMe123!}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  h2:
+    console:
+      enabled: false

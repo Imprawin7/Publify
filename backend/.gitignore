@@ -1,0 +1,7 @@
+target/
+uploads/
+*.class
+.idea/
+*.iml
+.DS_Store
+application-local.yml
