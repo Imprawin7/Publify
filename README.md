@@ -1,1682 +1,695 @@
-# <div align="center">
+# Publify
 
-# 
+### Modern Content Management & Publishing Platform
 
-# \# ✦ Publify
+Publify is a modern, full-stack content management and publishing platform designed to make digital content **easy to create, organize, manage, and publish**.
+
+Built with **Next.js, Spring Boot, PostgreSQL, and JWT-based authentication**, Publify provides a professional public-facing website alongside a secure administrative content management system.
+
+---
+
+## Overview
 
-# 
+Publify separates the public publishing experience from the administrative CMS.
 
-# \### Modern Content Management \& Publishing Platform
+The public website is designed for visitors, readers, and prospective users, while the protected admin application provides authenticated content management capabilities.
 
-# 
+```text
+                         Publify
+                            │
+             ┌──────────────┴──────────────┐
+             │                             │
+        Public Website                 Admin CMS
+             │                             │
+       Content Discovery             Authentication
+       Blogs & Projects              Content Management
+       About & Services              Media Management
+       Contact                       Messages
+             │                             │
+             └──────────────┬──────────────┘
+                            │
+                     Spring Boot API
+                            │
+                       PostgreSQL
+```
+
+---
+
+## Product Vision
+
+Publify is being built around a simple principle:
+
+> **Your content. Beautifully managed.**
+
+The platform is intended to provide the foundation for modern publishing workflows while maintaining a clean, premium, and distraction-free user experience.
+
+---
+
+## Core Features
+
+### Public Website
+
+* Premium responsive interface
+* Modern landing page
+* About section
+* Services
+* Projects
+* Experience
+* Testimonials
+* Published blog content
+* Individual blog pages
+* Contact form
+* Responsive navigation and footer
+* API-driven public content
+
+### Content Management
+
+Authenticated administrators can manage:
+
+* Projects
+* Blog posts
+* About information
+* Services
+* Skills
+* Experience
+* Testimonials
+* Media
+* Contact messages
+
+### Blog Management
+
+* Create blog posts
+* Edit existing posts
+* Delete posts
+* Draft and published states
+* Unique slugs
+* Cover images
+* Publication timestamps
+* Public blog rendering
+
+### Media Management
+
+* Image uploads
+* Media library
+* Image preview
+* File metadata
+* Public media URLs
+* Upload validation
+* Maximum upload size configuration
+
+### Authentication
+
+* JWT authentication
+* Access tokens
+* Refresh tokens
+* BCrypt password hashing
+* Role-based authorization
+* Protected administrative endpoints
+* Stateless Spring Security architecture
+
+---
+
+## Technology Stack
+
+### Frontend
+
+| Technology   | Purpose         |
+| ------------ | --------------- |
+| Next.js 14   | React framework |
+| React 18     | UI              |
+| TypeScript   | Type safety     |
+| Tailwind CSS | Styling         |
+| Lucide React | Interface icons |
+
+### Backend
+
+| Technology        | Purpose                        |
+| ----------------- | ------------------------------ |
+| Spring Boot 3.2.5 | REST API                       |
+| Java 17           | Backend runtime                |
+| Spring Security   | Authentication & authorization |
+| JJWT              | JWT token handling             |
+| Spring Data JPA   | Persistence                    |
+| Hibernate         | ORM                            |
+| Lombok            | Boilerplate reduction          |
+| PostgreSQL        | Production database            |
+| H2                | Local development database     |
+
+### Infrastructure
+
+| Technology | Purpose                  |
+| ---------- | ------------------------ |
+| Git        | Version control          |
+| GitHub     | Source repository        |
+| Docker     | Backend containerization |
+| Render     | Production hosting       |
+| PostgreSQL | Production database      |
+
+---
+
+## Architecture
+
+Publify uses a separated frontend/backend architecture.
+
+```text
+Browser
+   │
+   ▼
+Next.js Frontend
+   │
+   │ HTTPS / REST API
+   ▼
+Spring Boot API
+   │
+   ├── Authentication
+   ├── Content APIs
+   ├── Media APIs
+   └── Contact APIs
+   │
+   ▼
+PostgreSQL
+```
+
+The frontend and backend can therefore be deployed independently.
+
+---
+
+## Project Structure
+
+```text
+Publify/
+│
+├── backend/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── com/
+│   │       │       └── publify/
+│   │       │           ├── controller/
+│   │       │           ├── dto/
+│   │       │           ├── exception/
+│   │       │           ├── model/
+│   │       │           ├── repository/
+│   │       │           ├── security/
+│   │       │           └── service/
+│   │       │
+│   │       └── resources/
+│   │
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── application.yml
+│
+├── frontend/
+│   ├── app/
+│   │   ├── admin/
+│   │   ├── about/
+│   │   ├── blog/
+│   │   ├── contact/
+│   │   ├── experience/
+│   │   ├── projects/
+│   │   └── page.tsx
+│   │
+│   ├── components/
+│   ├── lib/
+│   ├── public/
+│   ├── package.json
+│   └── next.config.js
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+## Backend API
+
+The Spring Boot application exposes REST endpoints for authentication and content management.
+
+### Public endpoints
+
+```text
+GET  /about
+GET  /skills
+GET  /projects
+GET  /experience
+GET  /testimonials
+GET  /services
+GET  /blogs
+GET  /blogs/{slug}
+GET  /media/{filename}
+POST /contact
+```
+
+### Authentication
+
+```text
+POST /auth/login
+POST /auth/refresh
+```
+
+### Protected administration
+
+Administrative create, update, delete, media-management, and message-management operations require authentication.
+
+---
+
+## Authentication Model
+
+Publify currently uses JWT-based authentication.
+
+```text
+Login
+  │
+  ▼
+Email + Password
+  │
+  ▼
+Spring Security
+  │
+  ▼
+JWT Access Token + Refresh Token
+  │
+  ▼
+Authenticated API Requests
+```
+
+Access tokens are short-lived while refresh tokens provide a longer-lived mechanism for obtaining new access tokens.
+
+Passwords are stored using BCrypt hashing rather than plaintext credentials.
+
+---
+
+## Local Development
+
+### Prerequisites
+
+Install:
+
+* Java 17
+* Maven
+* Node.js
+* npm
+* Git
 
-# \*\*Create · Organize · Manage · Publish\*\*
+---
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Imprawin7/Publify.git
+cd Publify
+```
+
+---
+
+### 2. Start the backend
+
+```bash
+cd backend
+mvn clean package -DskipTests
+```
+
+Run:
 
-# 
+```bash
+java -jar target/publify-api-1.0.0.jar
+```
 
-# A modern full-stack platform for managing digital content through a clean public experience and a secure, powerful CMS.
+The backend runs on:
 
-# 
+```text
+http://localhost:8080
+```
 
-# <br>
+---
 
-# 
+### 3. Start the frontend
 
-# \[!\[Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge\\\&logo=next.js)](https://nextjs.org/)
+Open another terminal:
 
-# \[!\[React](https://img.shields.io/badge/React-18-149eca?style=for-the-badge\\\&logo=react)](https://react.dev/)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend runs on:
 
-# \[!\[Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-6DB33F?style=for-the-badge\\\&logo=springboot)](https://spring.io/projects/spring-boot)
+```text
+http://localhost:3000
+```
 
-# \[!\[Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge\\\&logo=openjdk)](https://www.oracle.com/java/)
+---
 
-# \[!\[PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-4169E1?style=for-the-badge\\\&logo=postgresql)](https://www.postgresql.org/)
+## Local Environment Configuration
 
-# \[!\[Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge\\\&logo=docker)](https://www.docker.com/)
+The frontend can use:
 
-# \[!\[Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge\\\&logo=render)](https://render.com/)
+```text
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+```
 
-# 
+The backend supports environment-based configuration for production values.
 
-# <br>
+Important production variables include:
 
-# 
+```text
+SPRING_PROFILES_ACTIVE=prod
+DATABASE_URL=<production database URL>
+JWT_SECRET=<strong secret>
+JWT_ACCESS_TOKEN_EXPIRY_MS=900000
+JWT_REFRESH_TOKEN_EXPIRY_MS=604800000
+FRONTEND_ORIGIN=<frontend URL>
+```
 
-# \*\*Your content. Beautifully managed.\*\*
+Never commit production secrets to Git.
 
-# 
+---
 
-# <br>
+## Default Development Administrator
 
-# 
+The local development environment includes a seeded administrator account:
 
-# \[🌐 Live Website](https://publify-nih3.onrender.com) · \[⚙️ API](https://publify-api.onrender.com) · \[📦 Repository](https://github.com/Imprawin7/Publify)
+```text
+Email:    admin@publify.local
+Password: ChangeMe123!
+```
 
-# 
+### Security Notice
 
-# </div>
+The default development credentials **must not be used for a production administrator account**.
 
-# 
+Production credentials should be supplied through environment variables and managed securely.
 
-# \---
+---
 
-# 
+## Production Deployment
 
-# \## 🟢 What is Publify?
+Publify is currently structured for deployment using Render.
 
-# 
+### Production Architecture
 
-# \*\*Publify\*\* is a modern content management and publishing platform designed to make digital content easier to create, organize, manage, and publish.
+```text
+                     Render
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+        ▼              ▼              ▼
+     Frontend       Backend       PostgreSQL
+     Next.js       Spring Boot      Database
+```
 
-# 
+### Production Services
 
-# It combines a polished public-facing website with a secure administrative CMS and a RESTful backend.
+**Frontend**
 
-# 
+```text
+https://publify-nih3.onrender.com
+```
 
-# The platform is designed to evolve from a traditional CMS into a more complete publishing infrastructure with:
+**Backend**
 
-# 
+```text
+https://publify-api.onrender.com
+```
 
-# \* 👤 User accounts
+The frontend communicates with the backend through HTTPS REST requests.
 
-# \* 🏢 Workspaces
+---
 
-# \* 👥 Team collaboration
+## Backend Deployment
 
-# \* 🔐 Role-based permissions
+The backend includes a multi-stage Dockerfile.
 
-# \* ✍️ Content creation
+```text
+Maven Build
+     │
+     ▼
+Spring Boot JAR
+     │
+     ▼
+Java 17 Runtime
+     │
+     ▼
+Docker Container
+```
 
-# \* 📰 Publishing workflows
+Render uses the backend Dockerfile to build and run the API.
 
-# \* 🗂️ Media management
+---
 
-# \* 📊 Analytics
+## Database
 
-# \* 🔎 SEO capabilities
+### Development
 
-# 
+Local development uses an H2 in-memory database.
 
-# \---
+```text
+jdbc:h2:mem:publify
+```
 
-# 
+### Production
 
-# \## ✨ Product Philosophy
+Production uses PostgreSQL through the Spring `prod` profile.
 
-# 
+```text
+SPRING_PROFILES_ACTIVE=prod
+DATABASE_URL=<Render PostgreSQL Internal Database URL>
+```
 
-# > \*\*Your content. Beautifully managed.\*\*
+The production database should always use a secure, private connection where supported by the hosting provider.
 
-# 
+---
 
-# Publify is built around a simple idea:
+## Security
 
-# 
+Publify includes several security controls:
 
-# \*\*Powerful content management should not feel complicated.\*\*
+* JWT authentication
+* BCrypt password hashing
+* Stateless authentication
+* Role-based endpoint authorization
+* CORS configuration
+* Protected administrative routes
+* Environment-based secrets
+* Production H2 console disabled
+* Separate public and authenticated API access
 
-# 
+Production deployments should always use:
 
-# The interface focuses on clarity, hierarchy, speed, and a distraction-free publishing experience while the underlying architecture is designed to support more advanced workflows over time.
+* Strong JWT secrets
+* Secure administrator credentials
+* HTTPS
+* Restricted CORS origins
+* Secure database credentials
+* Proper persistent storage for uploaded media
 
-# 
+---
 
-# \---
+## Admin CMS
 
-# 
+The administrative interface is intentionally separated from the public website.
 
-# \# 🎨 Platform
+```text
+/admin
+```
 
-# 
+The admin application provides management interfaces for:
 
-# <table>
+```text
+Dashboard
+├── About
+├── Projects
+├── Blogs
+├── Experience
+├── Services
+├── Skills
+├── Testimonials
+├── Media
+└── Messages
+```
 
-# <tr>
+The public website and admin CMS use different layouts and access rules.
 
-# <td width="33%" align="center">
+---
 
-# 
+## Content Model
 
-# \### 🟢 Content
+Publify currently supports the following primary content entities:
 
-# 
+```text
+About
+Blog
+Experience
+Media
+Message
+Project
+ServiceItem
+Skill
+Testimonial
+User
+```
 
-# Create and manage structured digital content.
+The architecture is designed to evolve toward a more complete multi-user CMS model.
 
-# 
+---
 
-# \*\*Blogs · Projects · Services · Pages\*\*
+## Roadmap
 
-# 
+Publify is being developed incrementally.
 
-# </td>
+### Phase 1 — Production Foundation
 
-# 
+* [x] Spring Boot backend
+* [x] Next.js frontend
+* [x] JWT authentication
+* [x] Administrative CMS
+* [x] Public website
+* [x] PostgreSQL production configuration
+* [x] Docker backend deployment
+* [x] Render backend deployment
+* [x] Render frontend deployment
 
-# <td width="33%" align="center">
+### Phase 2 — Account System
 
-# 
+* [ ] Public registration
+* [ ] Account creation
+* [ ] Secure onboarding
+* [ ] Password management
+* [ ] Account settings
 
-# \### 🔵 Publishing
+### Phase 3 — Workspace Architecture
 
-# 
+* [ ] Workspaces
+* [ ] Workspace membership
+* [ ] Workspace switching
+* [ ] Workspace-level permissions
+* [ ] Content ownership
 
-# Move content from creation to publication through a centralized CMS.
+### Phase 4 — Roles & Collaboration
 
-# 
+Planned roles:
 
-# \*\*Drafts · Published Content · Media\*\*
+```text
+OWNER
+ADMIN
+EDITOR
+AUTHOR
+```
 
-# 
+Planned capabilities include:
 
-# </td>
+* Member invitations
+* Role management
+* Permission controls
+* Collaborative publishing
+* Workspace administration
 
-# 
+### Phase 5 — Publishing Platform
 
-# <td width="33%" align="center">
+* [ ] Publishing workflows
+* [ ] Scheduled publishing
+* [ ] Content revisions
+* [ ] Draft management
+* [ ] Content search
+* [ ] Categories
+* [ ] Tags
+* [ ] SEO controls
+* [ ] Analytics
 
-# 
+---
 
-# \### 🟣 Collaboration
+## Design Principles
 
-# 
+Publify follows several product and engineering principles:
 
-# Architecture designed to evolve toward teams and workspaces.
+### 1. Content First
 
-# 
+The interface should keep content creation and publishing at the center of the experience.
 
-# \*\*Users · Roles · Workspaces\*\*
+### 2. Simple by Default
 
-# 
+Complex functionality should remain understandable and accessible.
 
-# </td>
+### 3. Professional Visual Language
 
-# </tr>
+Publify uses restrained typography, generous spacing, subtle borders, and focused visual hierarchy rather than excessive decoration.
 
-# </table>
+### 4. Secure by Design
 
-# 
+Authentication, authorization, secrets, and production configuration are treated as core infrastructure.
 
-# \---
+### 5. Modular Architecture
 
-# 
+Frontend, backend, authentication, content, and infrastructure should remain independently maintainable.
 
-# \# 🚀 Current Features
+### 6. Progressive Development
 
-# 
+New architecture should be introduced in controlled phases without unnecessarily disrupting existing functionality.
 
-# \## 🌐 Public Website
+---
 
-# 
+## Important Production Considerations
 
-# Publify includes a professional responsive public experience with:
+### Media Storage
 
-# 
+The current backend stores uploaded media using the application filesystem.
 
-# \* Modern landing page
+On cloud platforms such as Render, application filesystems may be ephemeral depending on the service configuration.
 
-# \* About section
+For production-scale media storage, Publify should eventually use durable object storage such as:
 
-# \* Services
+* Amazon S3
+* Cloudflare R2
+* Cloudinary
+* Another compatible object-storage provider
 
-# \* Projects
+### Database Migrations
 
-# \* Experience
+The current production configuration uses Hibernate schema updates during the initial deployment stage.
 
-# \* Testimonials
+As the platform evolves, dedicated database migration tooling such as Flyway or Liquibase should be introduced.
 
-# \* Blog listing
+### Authentication Expansion
 
-# \* Individual blog pages
+The current authentication model is administrator-oriented.
 
-# \* Contact form
+The planned account and workspace architecture will move authorization from a single global administrator model toward:
 
-# \* Responsive navigation
+```text
+User
+  │
+  ▼
+Workspace Membership
+  │
+  ▼
+Workspace
+  │
+  ├── Role
+  ├── Permissions
+  └── Content
+```
 
-# \* Responsive footer
+---
 
-# \* API-driven content
+## Repository
 
-# \* Premium product-oriented visual design
+Source code:
 
-# 
+[GitHub — Imprawin7/Publify](https://github.com/Imprawin7/Publify?utm_source=chatgpt.com)
 
-# \---
+---
 
-# 
+## License
 
-# \## 🧩 Content Management System
+This project is currently maintained as a private/product development project.
 
-# 
+License terms should be defined before distributing the software publicly.
 
-# The protected CMS allows administrators to manage:
+---
 
-# 
+## Status
 
-# | Module          | Capabilities                            |
+**Publify is actively under development.**
 
-# | --------------- | --------------------------------------- |
-
-# | 📝 Blogs        | Create, edit, publish, draft and delete |
-
-# | 🚀 Projects     | Manage projects, technologies and links |
-
-# | 👤 About        | Manage platform/company information     |
-
-# | 💼 Experience   | Manage experience entries               |
-
-# | 🛠️ Services    | Manage services and descriptions        |
-
-# | ⚡ Skills        | Manage skills and categories            |
-
-# | 💬 Testimonials | Manage testimonials                     |
-
-# | 🖼️ Media       | Upload and manage images                |
-
-# | ✉️ Messages     | View and manage contact submissions     |
-
-# 
-
-# \---
-
-# 
-
-# \# 📝 Blog Management
-
-# 
-
-# Publify provides a structured blog management system.
-
-# 
-
-# \### Supported functionality
-
-# 
-
-# \* Create posts
-
-# \* Edit posts
-
-# \* Delete posts
-
-# \* Draft status
-
-# \* Published status
-
-# \* Unique slugs
-
-# \* Cover images
-
-# \* Publication timestamps
-
-# \* Public blog pages
-
-# \* API-driven blog content
-
-# 
-
-# ```text
-
-# Create
-
-# &#x20;  │
-
-# &#x20;  ▼
-
-# Draft
-
-# &#x20;  │
-
-# &#x20;  ▼
-
-# Review
-
-# &#x20;  │
-
-# &#x20;  ▼
-
-# Publish
-
-# &#x20;  │
-
-# &#x20;  ▼
-
-# Public Website
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \# 🖼️ Media Management
-
-# 
-
-# The CMS includes a dedicated media management interface.
-
-# 
-
-# \### Current capabilities
-
-# 
-
-# \* Image uploads
-
-# \* Drag \& drop uploads
-
-# \* Image validation
-
-# \* File size validation
-
-# \* Image preview
-
-# \* Media library
-
-# \* Copy image URL
-
-# \* Open uploaded image
-
-# \* Public media serving
-
-# 
-
-# > \*\*Production note:\*\* cloud deployments should use durable object storage for long-term media persistence.
-
-# 
-
-# \---
-
-# 
-
-# \# 🔐 Authentication \& Security
-
-# 
-
-# Publify uses \*\*JWT-based authentication\*\* backed by Spring Security.
-
-# 
-
-# \### Authentication flow
-
-# 
-
-# ```text
-
-# &#x20;            Login
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;       Email + Password
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;       Spring Security
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;     ┌─────────────────┐
-
-# &#x20;     │  Access Token   │
-
-# &#x20;     │  Refresh Token  │
-
-# &#x20;     └─────────────────┘
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;     Authenticated APIs
-
-# ```
-
-# 
-
-# \### Security features
-
-# 
-
-# \* 🔒 JWT access tokens
-
-# \* 🔄 Refresh tokens
-
-# \* 🔐 BCrypt password hashing
-
-# \* 🛡️ Spring Security
-
-# \* 👑 Role-based authorization
-
-# \* 🚫 Protected admin endpoints
-
-# \* 🌍 CORS configuration
-
-# \* 🔑 Environment-based secrets
-
-# \* 📦 Stateless authentication
-
-# \* 🚫 H2 console disabled in production
-
-# 
-
-# \---
-
-# 
-
-# \# 🏗️ Architecture
-
-# 
-
-# Publify follows a separated frontend/backend architecture.
-
-# 
-
-# ```text
-
-# &#x20;                        ┌───────────────────┐
-
-# &#x20;                        │      Browser      │
-
-# &#x20;                        └─────────┬─────────┘
-
-# &#x20;                                  │
-
-# &#x20;                             HTTPS / REST
-
-# &#x20;                                  │
-
-# &#x20;                   ┌──────────────▼──────────────┐
-
-# &#x20;                   │       Next.js Frontend      │
-
-# &#x20;                   │                              │
-
-# &#x20;                   │  Public Website             │
-
-# &#x20;                   │  Admin CMS                  │
-
-# &#x20;                   └──────────────┬──────────────┘
-
-# &#x20;                                  │
-
-# &#x20;                             REST API
-
-# &#x20;                                  │
-
-# &#x20;                   ┌──────────────▼──────────────┐
-
-# &#x20;                   │      Spring Boot API        │
-
-# &#x20;                   │                              │
-
-# &#x20;                   │ Authentication              │
-
-# &#x20;                   │ Content APIs                │
-
-# &#x20;                   │ Media APIs                  │
-
-# &#x20;                   │ Contact APIs                │
-
-# &#x20;                   └──────────────┬──────────────┘
-
-# &#x20;                                  │
-
-# &#x20;                             JPA / Hibernate
-
-# &#x20;                                  │
-
-# &#x20;                   ┌──────────────▼──────────────┐
-
-# &#x20;                   │         PostgreSQL          │
-
-# &#x20;                   │       Production DB         │
-
-# &#x20;                   └─────────────────────────────┘
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \# 🛠️ Technology Stack
-
-# 
-
-# \## Frontend
-
-# 
-
-# | Technology          | Role                  |
-
-# | ------------------- | --------------------- |
-
-# | ⚫ \*\*Next.js 14\*\*    | Application framework |
-
-# | ⚛️ \*\*React 18\*\*     | UI framework          |
-
-# | 🔷 \*\*TypeScript\*\*   | Type safety           |
-
-# | 🎨 \*\*Tailwind CSS\*\* | Styling               |
-
-# | ✦ \*\*Lucide React\*\*  | Interface icons       |
-
-# 
-
-# \## Backend
-
-# 
-
-# | Technology               | Role                  |
-
-# | ------------------------ | --------------------- |
-
-# | 🍃 \*\*Spring Boot 3.2.5\*\* | REST API              |
-
-# | ☕ \*\*Java 17\*\*            | Runtime               |
-
-# | 🔐 \*\*Spring Security\*\*   | Authentication        |
-
-# | 🔑 \*\*JJWT\*\*              | JWT implementation    |
-
-# | 🗃️ \*\*Spring Data JPA\*\*  | Persistence           |
-
-# | 🧬 \*\*Hibernate\*\*         | ORM                   |
-
-# | 🧰 \*\*Lombok\*\*            | Boilerplate reduction |
-
-# 
-
-# \## Infrastructure
-
-# 
-
-# | Technology        | Role                     |
-
-# | ----------------- | ------------------------ |
-
-# | 🐘 \*\*PostgreSQL\*\* | Production database      |
-
-# | 🐳 \*\*Docker\*\*     | Backend containerization |
-
-# | 🐙 \*\*Git\*\*        | Version control          |
-
-# | 🐱 \*\*GitHub\*\*     | Source repository        |
-
-# | 🟢 \*\*Render\*\*     | Cloud deployment         |
-
-# 
-
-# \---
-
-# 
-
-# \# 📁 Project Structure
-
-# 
-
-# ```text
-
-# Publify/
-
-# │
-
-# ├── backend/
-
-# │   │
-
-# │   ├── src/
-
-# │   │   └── main/
-
-# │   │       ├── java/
-
-# │   │       │   └── com/
-
-# │   │       │       └── publify/
-
-# │   │       │           ├── controller/
-
-# │   │       │           ├── dto/
-
-# │   │       │           ├── exception/
-
-# │   │       │           ├── model/
-
-# │   │       │           ├── repository/
-
-# │   │       │           ├── security/
-
-# │   │       │           └── service/
-
-# │   │       │
-
-# │   │       └── resources/
-
-# │   │
-
-# │   ├── Dockerfile
-
-# │   ├── pom.xml
-
-# │   └── application.yml
-
-# │
-
-# ├── frontend/
-
-# │   │
-
-# │   ├── app/
-
-# │   │   ├── admin/
-
-# │   │   ├── about/
-
-# │   │   ├── blog/
-
-# │   │   ├── contact/
-
-# │   │   ├── experience/
-
-# │   │   ├── projects/
-
-# │   │   └── page.tsx
-
-# │   │
-
-# │   ├── components/
-
-# │   ├── lib/
-
-# │   ├── public/
-
-# │   ├── package.json
-
-# │   └── next.config.js
-
-# │
-
-# ├── .gitignore
-
-# ├── Dockerfile
-
-# └── README.md
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \# 🔌 API
-
-# 
-
-# Publify exposes REST APIs for public content, authentication, administration, and media.
-
-# 
-
-# \## 🌍 Public APIs
-
-# 
-
-# ```http
-
-# GET /about
-
-# GET /skills
-
-# GET /projects
-
-# GET /experience
-
-# GET /testimonials
-
-# GET /services
-
-# GET /blogs
-
-# GET /blogs/{slug}
-
-# GET /media/{filename}
-
-# POST /contact
-
-# ```
-
-# 
-
-# \## 🔐 Authentication APIs
-
-# 
-
-# ```http
-
-# POST /auth/login
-
-# POST /auth/refresh
-
-# ```
-
-# 
-
-# \## 👑 Administrative APIs
-
-# 
-
-# Administrative create, update, delete, media-management, and message-management operations require an authenticated administrator.
-
-# 
-
-# \---
-
-# 
-
-# \# 🗄️ Data Model
-
-# 
-
-# Publify currently includes the following core entities:
-
-# 
-
-# ```text
-
-# About
-
-# Blog
-
-# Experience
-
-# Media
-
-# Message
-
-# Project
-
-# ServiceItem
-
-# Skill
-
-# Testimonial
-
-# User
-
-# ```
-
-# 
-
-# The architecture is intentionally designed so additional ownership and collaboration layers can be introduced without rebuilding the entire platform.
-
-# 
-
-# \---
-
-# 
-
-# \# 💻 Local Development
-
-# 
-
-# \## Requirements
-
-# 
-
-# Before running Publify locally, install:
-
-# 
-
-# \* Java 17+
-
-# \* Maven
-
-# \* Node.js
-
-# \* npm
-
-# \* Git
-
-# 
-
-# \---
-
-# 
-
-# \## 1. Clone
-
-# 
-
-# ```bash
-
-# git clone https://github.com/Imprawin7/Publify.git
-
-# cd Publify
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## 2. Start the Backend
-
-# 
-
-# ```bash
-
-# cd backend
-
-# mvn clean package -DskipTests
-
-# ```
-
-# 
-
-# Run the application:
-
-# 
-
-# ```bash
-
-# java -jar target/publify-api-1.0.0.jar
-
-# ```
-
-# 
-
-# Backend:
-
-# 
-
-# ```text
-
-# http://localhost:8080
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## 3. Start the Frontend
-
-# 
-
-# Open another terminal:
-
-# 
-
-# ```bash
-
-# cd frontend
-
-# npm install
-
-# npm run dev
-
-# ```
-
-# 
-
-# Frontend:
-
-# 
-
-# ```text
-
-# http://localhost:3000
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \# ⚙️ Environment Configuration
-
-# 
-
-# \## Frontend
-
-# 
-
-# Local development:
-
-# 
-
-# ```env
-
-# NEXT\_PUBLIC\_API\_BASE\_URL=http://localhost:8080
-
-# ```
-
-# 
-
-# Production:
-
-# 
-
-# ```env
-
-# NEXT\_PUBLIC\_API\_BASE\_URL=https://publify-api.onrender.com
-
-# ```
-
-# 
-
-# \## Backend
-
-# 
-
-# Production configuration:
-
-# 
-
-# ```env
-
-# SPRING\_PROFILES\_ACTIVE=prod
-
-# 
-
-# DATABASE\_URL=<production database URL>
-
-# 
-
-# JWT\_SECRET=<strong production secret>
-
-# 
-
-# JWT\_ACCESS\_TOKEN\_EXPIRY\_MS=900000
-
-# 
-
-# JWT\_REFRESH\_TOKEN\_EXPIRY\_MS=604800000
-
-# 
-
-# FRONTEND\_ORIGIN=<frontend production URL>
-
-# ```
-
-# 
-
-# \### 🔴 Security
-
-# 
-
-# Never commit:
-
-# 
-
-# \* JWT secrets
-
-# \* Database credentials
-
-# \* Email passwords
-
-# \* API keys
-
-# \* Production environment files
-
-# 
-
-# \---
-
-# 
-
-# \# 👤 Development Administrator
-
-# 
-
-# The local development environment includes a seeded administrator:
-
-# 
-
-# ```text
-
-# Email:
-
-# admin@publify.local
-
-# 
-
-# Password:
-
-# ChangeMe123!
-
-# ```
-
-# 
-
-# \### ⚠️ Important
-
-# 
-
-# These credentials are intended for development/testing only.
-
-# 
-
-# A production administrator account should use secure credentials managed through the deployment environment.
-
-# 
-
-# \---
-
-# 
-
-# \# ☁️ Production Deployment
-
-# 
-
-# Publify is deployed using \*\*Render\*\*.
-
-# 
-
-# \## Production architecture
-
-# 
-
-# ```text
-
-# &#x20;                        Render
-
-# &#x20;                          │
-
-# &#x20;            ┌─────────────┼─────────────┐
-
-# &#x20;            │             │             │
-
-# &#x20;            ▼             ▼             ▼
-
-# &#x20;       Next.js App   Spring Boot API  PostgreSQL
-
-# &#x20;            │             │             │
-
-# &#x20;            └─────────────┴─────────────┘
-
-# &#x20;                          │
-
-# &#x20;                       Internet
-
-# ```
-
-# 
-
-# \### 🌐 Frontend
-
-# 
-
-# \*\*Publify Web\*\*
-
-# 
-
-# https://publify-nih3.onrender.com
-
-# 
-
-# \### ⚙️ Backend
-
-# 
-
-# \*\*Publify API\*\*
-
-# 
-
-# https://publify-api.onrender.com
-
-# 
-
-# \### 🗄️ Database
-
-# 
-
-# Production PostgreSQL hosted through Render.
-
-# 
-
-# \---
-
-# 
-
-# \# 🐳 Docker
-
-# 
-
-# The backend includes a multi-stage Docker build.
-
-# 
-
-# ```text
-
-# &#x20;            Maven
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;       Compile Application
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;       Build Spring Boot JAR
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;       Java 17 Runtime Image
-
-# &#x20;              │
-
-# &#x20;              ▼
-
-# &#x20;         Docker Container
-
-# ```
-
-# 
-
-# This keeps the production runtime smaller and separates compilation from execution.
-
-# 
-
-# \---
-
-# 
-
-# \# 🧠 Design Principles
-
-# 
-
-# Publify is guided by several core principles.
-
-# 
-
-# \### 🟢 01 — Content First
-
-# 
-
-# The content should remain the center of the product.
-
-# 
-
-# \### 🔵 02 — Simple by Default
-
-# 
-
-# Powerful functionality should remain easy to understand.
-
-# 
-
-# \### 🟣 03 — Professional by Design
-
-# 
-
-# Publify favors:
-
-# 
-
-# \* Strong typography
-
-# \* Generous whitespace
-
-# \* Clear hierarchy
-
-# \* Restrained color
-
-# \* Subtle borders
-
-# \* Refined interactions
-
-# 
-
-# \### 🟠 04 — Secure by Default
-
-# 
-
-# Authentication, authorization, secrets, and production configuration are treated as fundamental infrastructure.
-
-# 
-
-# \### 🔷 05 — Modular Architecture
-
-# 
-
-# Frontend, backend, database, authentication, and content services remain independently maintainable.
-
-# 
-
-# \### ⚪ 06 — Progressive Development
-
-# 
-
-# New capabilities are introduced in controlled phases without unnecessarily breaking existing functionality.
-
-# 
-
-# \---
-
-# 
-
-# \# 🗺️ Roadmap
-
-# 
-
-# Publify is being developed progressively.
-
-# 
-
-# \## 🟢 Phase 1 — Production Foundation
-
-# 
-
-# \* \[x] Next.js frontend
-
-# \* \[x] Spring Boot backend
-
-# \* \[x] PostgreSQL production configuration
-
-# \* \[x] JWT authentication
-
-# \* \[x] Admin CMS
-
-# \* \[x] Public website
-
-# \* \[x] Blog management
-
-# \* \[x] Media management
-
-# \* \[x] Contact management
-
-# \* \[x] Docker backend
-
-# \* \[x] Render backend deployment
-
-# \* \[x] Render frontend deployment
-
-# 
-
-# \---
-
-# 
-
-# \## 🔵 Phase 2 — Accounts
-
-# 
-
-# \* \[ ] Public registration
-
-# \* \[ ] User accounts
-
-# \* \[ ] Secure onboarding
-
-# \* \[ ] Password management
-
-# \* \[ ] Account settings
-
-# \* \[ ] Profile management
-
-# 
-
-# \---
-
-# 
-
-# \## 🟣 Phase 3 — Workspaces
-
-# 
-
-# Planned architecture:
-
-# 
-
-# ```text
-
-# User
-
-# &#x20;│
-
-# &#x20;▼
-
-# Workspace Membership
-
-# &#x20;│
-
-# &#x20;▼
-
-# Workspace
-
-# &#x20;│
-
-# &#x20;├── Members
-
-# &#x20;├── Roles
-
-# &#x20;├── Permissions
-
-# &#x20;└── Content
-
-# ```
-
-# 
-
-# Planned capabilities:
-
-# 
-
-# \* \[ ] Workspace creation
-
-# \* \[ ] Workspace settings
-
-# \* \[ ] Workspace switching
-
-# \* \[ ] Workspace membership
-
-# \* \[ ] Content ownership
-
-# \* \[ ] Workspace-level permissions
-
-# 
-
-# \---
-
-# 
-
-# \## 🟠 Phase 4 — Collaboration
-
-# 
-
-# Planned roles:
-
-# 
-
-# ```text
-
-# OWNER
-
-# ADMIN
-
-# EDITOR
-
-# AUTHOR
-
-# ```
-
-# 
-
-# Planned functionality:
-
-# 
-
-# \* \[ ] Member invitations
-
-# \* \[ ] Role management
-
-# \* \[ ] Permission management
-
-# \* \[ ] Collaborative content management
-
-# \* \[ ] Publishing permissions
-
-# \* \[ ] Team administration
-
-# 
-
-# \---
-
-# 
-
-# \## 🔴 Phase 5 — Advanced Publishing
-
-# 
-
-# \* \[ ] Publishing workflows
-
-# \* \[ ] Scheduled publishing
-
-# \* \[ ] Content revisions
-
-# \* \[ ] Version history
-
-# \* \[ ] Categories
-
-# \* \[ ] Tags
-
-# \* \[ ] Content search
-
-# \* \[ ] SEO controls
-
-# \* \[ ] Analytics
-
-# \* \[ ] Publishing automation
-
-# 
-
-# \---
-
-# 
-
-# \# 🔒 Production Considerations
-
-# 
-
-# \## Media Storage
-
-# 
-
-# The current implementation uses application filesystem storage for uploaded media.
-
-# 
-
-# Cloud application filesystems may be ephemeral.
-
-# 
-
-# For production-scale deployments, Publify should eventually move media storage to durable object storage such as:
-
-# 
-
-# \* Amazon S3
-
-# \* Cloudflare R2
-
-# \* Cloudinary
-
-# \* Compatible object storage
-
-# 
-
-# \---
-
-# 
-
-# \## Database Migrations
-
-# 
-
-# The current production configuration uses Hibernate schema updates during the early deployment stage.
-
-# 
-
-# As the database model becomes more mature, dedicated migration tooling such as:
-
-# 
-
-# \* Flyway
-
-# \* Liquibase
-
-# 
-
-# should be introduced.
-
-# 
-
-# \---
-
-# 
-
-# \# 📊 Development Status
-
-# 
-
-# <div align="center">
-
-# 
-
-# \### Publify is actively under development.
-
-# 
-
-# <br>
-
-# 
-
-# | Area                   | Status         |
-
-# | ---------------------- | -------------- |
-
-# | 🌐 Public Website      | 🟢 Live        |
-
-# | ⚙️ REST API            | 🟢 Live        |
-
-# | 🔐 Authentication      | 🟢 Implemented |
-
-# | 👑 Admin CMS           | 🟢 Implemented |
-
-# | 📝 Blog System         | 🟢 Implemented |
-
-# | 🖼️ Media Management   | 🟢 Implemented |
-
-# | 🐘 PostgreSQL          | 🟢 Production  |
-
-# | 🐳 Docker              | 🟢 Ready       |
-
-# | ☁️ Render Deployment   | 🟢 Live        |
-
-# | 👤 User Accounts       | 🟡 Planned     |
-
-# | 🏢 Workspaces          | 🟡 Planned     |
-
-# | 👥 Collaboration       | 🟡 Planned     |
-
-# | 📊 Advanced Publishing | 🟡 Planned     |
-
-# 
-
-# </div>
-
-# 
-
-# \---
-
-# 
-
-# \# 🌍 Links
-
-# 
-
-# <div align="center">
-
-# 
-
-# \### Publify
-
-# 
-
-# \*\*Modern content management for modern publishing.\*\*
-
-# 
-
-# <br>
-
-# 
-
-# 🌐 \*\*Website\*\*
-
-# https://publify-nih3.onrender.com
-
-# 
-
-# ⚙️ \*\*API\*\*
-
-# https://publify-api.onrender.com
-
-# 
-
-# 📦 \*\*GitHub\*\*
-
-# https://github.com/Imprawin7/Publify
-
-# 
-
-# </div>
-
-# 
-
-# \---
-
-# 
-
-# \# 📄 License
-
-# 
-
-# Publify is currently maintained as a private/product development project.
-
-# 
-
-# License terms should be defined before distributing the software publicly.
-
-# 
-
-# \---
-
-# 
-
-# <div align="center">
-
-# 
-
-# \### ✦ Publify
-
-# 
-
-# \*\*Create. Organize. Manage. Publish.\*\*
-
-# 
-
-# <br>
-
-# 
-
-# Made for modern digital publishing.
-
-# 
-
-# </div>
-
-
-
+The current production foundation includes a deployed Next.js frontend, Spring Boot API, and PostgreSQL database, with further account, workspace, collaboration, and publishing capabilities planned for subsequent development phases.
