@@ -2,12 +2,14 @@ package com.publify.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "users")
 @Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +21,11 @@ public class User {
     private String passwordHash;
 
     @Column(nullable = false)
-    private String role = "ADMIN";
+    private String role = "USER";
 
-    @Column(name = "created_at")
+    @Column(nullable = false)
+    private boolean enabled = true;
+
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 }

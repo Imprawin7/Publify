@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/contact").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/workspace/**").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/media/library").hasRole("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,
                         "/about", "/skills", "/projects", "/blogs", "/blogs/**",

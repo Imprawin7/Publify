@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
@@ -15,8 +15,12 @@ export default function PublicShell({
   const pathname = usePathname();
 
   const isAdmin = pathname.startsWith("/admin");
+  const isWorkspace =
+    pathname.startsWith("/workspace") ||
+    pathname === "/login" ||
+    pathname === "/register";
 
-  if (isAdmin) {
+  if (isAdmin || isWorkspace) {
     return <>{children}</>;
   }
 

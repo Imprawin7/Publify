@@ -36,3 +36,6 @@ backend-backup-phase1/
 
 # Logs
 *.log
+
+backend/data/
+backend/effective-pom

@@ -27,22 +27,110 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(String email, String role) {
-        return buildToken(email, role, "access", accessTokenExpiryMs);
+        return buildToken(
+                email,
+                role,
+                null,
+                "access",
+                accessTokenExpiryMs
+        );
+    }
+
+    public String generateAccessToken(
+            String email,
+            String role,
+            Long workspaceId,
+            String workspaceRole
+    ) {
+        return buildToken(
+                email,
+                role,
+                workspaceId,
+                workspaceRole,
+                "access",
+                accessTokenExpiryMs
+        );
     }
 
     public String generateRefreshToken(String email, String role) {
-        return buildToken(email, role, "refresh", refreshTokenExpiryMs);
+        return buildToken(
+                email,
+                role,
+                null,
+                "refresh",
+                refreshTokenExpiryMs
+        );
     }
 
-    private String buildToken(String email, String role, String type, long expiryMs) {
+    public String generateRefreshToken(
+            String email,
+            String role,
+            Long workspaceId,
+            String workspaceRole
+    ) {
+        return buildToken(
+                email,
+                role,
+                workspaceId,
+                workspaceRole,
+                "refresh",
+                refreshTokenExpiryMs
+        );
+    }
+
+    private String buildToken(
+            String email,
+            String role,
+            Long workspaceId,
+            String type,
+            long expiryMs
+    ) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expiryMs);
-        return Jwts.builder()
+
+        JwtBuilder builder = Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .claim("type", type)
                 .setIssuedAt(now)
-                .setExpiration(expiry)
+                .setExpiration(expiry);
+
+        if (workspaceId != null) {
+            builder.claim("workspaceId", workspaceId);
+        }
+
+        return builder
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private String buildToken(
+            String email,
+            String role,
+            Long workspaceId,
+            String workspaceRole,
+            String type,
+            long expiryMs
+    ) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + expiryMs);
+
+        JwtBuilder builder = Jwts.builder()
+                .setSubject(email)
+                .claim("role", role)
+                .claim("type", type)
+                .setIssuedAt(now)
+                .setExpiration(expiry);
+
+        if (workspaceId != null) {
+            builder.claim("workspaceId", workspaceId);
+        }
+
+        if (workspaceRole != null && !workspaceRole.isBlank()) {
+            builder.claim("workspaceRole", workspaceRole);
+        }
+
+        return builder
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -70,6 +158,24 @@ public class JwtUtil {
 
     public String extractRole(String token) {
         return parseClaims(token).get("role", String.class);
+    }
+
+    public String extractWorkspaceRole(String token) {
+        return parseClaims(token).get("workspaceRole", String.class);
+    }
+
+    public Long extractWorkspaceId(String token) {
+        Object value = parseClaims(token).get("workspaceId");
+
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Number number) {
+            return number.longValue();
+        }
+
+        return Long.valueOf(value.toString());
     }
 
     public String extractType(String token) {

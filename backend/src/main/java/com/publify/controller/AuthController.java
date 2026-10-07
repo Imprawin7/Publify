@@ -3,6 +3,7 @@ package com.publify.controller;
 import com.publify.dto.LoginRequest;
 import com.publify.dto.LoginResponse;
 import com.publify.dto.RefreshRequest;
+import com.publify.dto.RegisterRequest;
 import com.publify.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,24 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> register(
+            @Valid @RequestBody RegisterRequest request
+    ) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(@Valid @RequestBody RefreshRequest request) {
+    public ResponseEntity<LoginResponse> refresh(
+            @Valid @RequestBody RefreshRequest request
+    ) {
         return ResponseEntity.ok(authService.refresh(request.getRefreshToken()));
     }
 }

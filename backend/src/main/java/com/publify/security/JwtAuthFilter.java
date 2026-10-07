@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-/** Reads the Bearer access token on each request and, if valid, populates the SecurityContext. */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -36,13 +36,39 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            if (jwtUtil.isValid(token) && "access".equals(jwtUtil.extractType(token))) {
+            if (jwtUtil.isValid(token)
+                    && "access".equals(jwtUtil.extractType(token))) {
+
                 String email = jwtUtil.extractEmail(token);
                 String role = jwtUtil.extractRole(token);
+                String workspaceRole = jwtUtil.extractWorkspaceRole(token);
 
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
-                var authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+                if (role != null && !role.isBlank()) {
+                    authorities.add(
+                            new SimpleGrantedAuthority("ROLE_" + role)
+                    );
+                }
+
+                if (workspaceRole != null && !workspaceRole.isBlank()) {
+                    authorities.add(
+                            new SimpleGrantedAuthority(
+                                    "WORKSPACE_" + workspaceRole
+                            )
+                    );
+                }
+
+                var authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                authorities
+                        );
+
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authentication);
             }
         }
 
